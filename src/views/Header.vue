@@ -28,6 +28,7 @@
 </template>
 
 <script lang="ts">
+import store from '@/Store';
 import { Options, Vue } from 'vue-class-component';
 import Menu, { Item } from '@/components/Menu.vue'; // @ is an alias to /src
 
@@ -37,18 +38,37 @@ import Menu, { Item } from '@/components/Menu.vue'; // @ is an alias to /src
     },
 })
 export default class Home extends Vue {
-    private list: Item[] = [{label: 'coucou'}];
+    get settingsList() {
+        const list: Item[] = [];
+
+        list.push({
+            label: 'item1',
+            id: 'item1',
+        });
+
+        return list;
+    }
+
+    get list() {
+        const openMenu = store.openMenu;
+        const settingsList = this.settingsList;
+
+        if (openMenu === 'settings') {
+            return settingsList;
+        }
+        return [] as Item[];
+    }
 
     buttonSettings() {
-        console.log('button settings');
+        store.openMenu = 'settings';
     }
 
     buttonActions() {
-        console.log('button actions');
+        console.log('TODO button actions');
     }
 
     buttonMenu() {
-        console.log('button menu');
+        console.log('TODO button menu');
     }
 }
 </script>
@@ -58,7 +78,7 @@ export default class Home extends Vue {
     display: grid;
     grid-template: 1fr 1fr 1fr;
     grid-template-areas: "settings actions menu";
-    height: 50px;
+    height: var(--header-height);
 }
 
 .settings {
@@ -77,7 +97,7 @@ button {
     width: 100%;
     max-width: 100px;
     height: 100%;
-    font-size: 35px;
+    font-size: calc(var(--header-height - 10px));
 
     color: var(--button-color);
     background-color: var(--button-bg-color);
