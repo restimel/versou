@@ -25,16 +25,20 @@
     <Menu
         :items="list"
     />
+    <Notification />
 </template>
 
 <script lang="ts">
 import store from '@/Store';
 import { Options, Vue } from 'vue-class-component';
 import Menu, { Item } from '@/components/Menu.vue'; // @ is an alias to /src
+import Notification from '@/components/Notification.vue';
+import notification from '@/Notification';
 
 @Options({
     components: {
         Menu,
+        Notification,
     },
 })
 export default class Home extends Vue {
@@ -65,10 +69,16 @@ export default class Home extends Vue {
 
     buttonActions() {
         console.log('TODO button actions');
+        notification('TODO button actions', {
+        });
     }
 
     buttonMenu() {
         console.log('TODO button menu');
+        notification('TODO button menu', {
+            important: true,
+            title: 'TODO',
+        });
     }
 }
 </script>
