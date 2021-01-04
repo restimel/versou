@@ -22,5 +22,7 @@ module.exports = {
         'space-before-function-paren': ['error', 'never'],
         'quotes': ['error', 'single', { 'allowTemplateLiterals': true }],
         'no-unreachable': 'error',
+        'no-use-before-define': ['error', { 'functions': false }],
+        '@typescript-eslint/no-use-before-define': ['error', { 'functions': false }],
     },
 };
