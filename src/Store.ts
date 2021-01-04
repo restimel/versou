@@ -9,12 +9,16 @@ import {
     MenuType,
     NotificationSettings,
     NotificationMessage,
+    GeolocLog,
+    GeolocSettings,
 } from '@/Types';
 
 interface Store {
     openMenu: MenuType;
     notificationSettings: NotificationSettings;
     notification: NotificationMessage;
+    geolocSettings: GeolocSettings;
+    currentPath: GeolocLog;
 }
 
 const store = reactive<Store>({
@@ -28,6 +32,17 @@ const store = reactive<Store>({
         message: '',
         type: 'info',
         active: false,
+    },
+    geolocSettings: {
+        refreshTime: 30000,
+        highPrecision: true,
+        isRecording: false,
+    },
+    currentPath: {
+        name: '',
+        path: [],
+        startTime: 0,
+        pauseDuration: 0,
     },
 });
 

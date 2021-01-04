@@ -2,6 +2,8 @@
 
 export type MenuType = '' | 'settings' | 'actions' | 'menu';
 
+/* {{{ Notification */
+
 export interface NotificationSettings {
     /** Try to send a web-notification for important message */
     hardware: boolean;
@@ -18,3 +20,35 @@ export interface NotificationMessage {
     type: NotificationType;
     active: boolean;
 }
+
+/* }}} */
+/* {{{ Geolocalisation */
+
+export interface GeolocPoint {
+    lat: number;
+    lng: number;
+    alt?: number;
+    accuracy?: number;
+    altAccuracy?: number;
+    heading?: number;
+    speed?: number;
+}
+
+export interface GeolocRecord extends GeolocPoint {
+    relativeTime: number;
+}
+
+export interface GeolocLog {
+    name?: string;
+    path: GeolocRecord[];
+    startTime: number;
+    pauseDuration: number;
+}
+
+export interface GeolocSettings {
+    refreshTime: number;
+    highPrecision: boolean;
+    isRecording: boolean;
+}
+
+/* }}} */

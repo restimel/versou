@@ -24,6 +24,7 @@
     </div>
     <Menu
         :items="list"
+        @click="menuSelection"
     />
     <Notification />
 </template>
@@ -34,6 +35,12 @@ import { Options, Vue } from 'vue-class-component';
 import Menu, { Item } from '@/components/Menu.vue'; // @ is an alias to /src
 import Notification from '@/components/Notification.vue';
 import notification from '@/Notification';
+import {
+    startLog,
+} from '@/Geoloc';
+
+/* Texts */
+const textStart = 'Démarrer la randonée';
 
 @Options({
     components: {
@@ -46,11 +53,16 @@ export default class Home extends Vue {
         const list: Item[] = [];
 
         list.push({
-            label: 'item1',
-            id: 'item1',
+            label: textStart,
+            id: 'start',
+            disabled: this.isRecording,
         });
 
         return list;
+    }
+
+    get isRecording() {
+        return store.geolocSettings.isRecording;
     }
 
     get list() {
@@ -79,6 +91,14 @@ export default class Home extends Vue {
             important: true,
             title: 'TODO',
         });
+    }
+
+    menuSelection(id: string) {
+        switch(id) {
+            case 'start':
+                startLog();
+                break;
+        }
     }
 }
 </script>
