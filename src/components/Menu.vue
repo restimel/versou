@@ -8,6 +8,9 @@
         <div v-for="item of items"
             :key="item.id"
             class="menu__item"
+            :class="{
+                disabled: !!item.disabled,
+            }"
             @click="onClick(item)"
         >
             {{item.label}}
@@ -21,6 +24,7 @@ import { Options, Vue } from 'vue-class-component';
 export interface Item {
     label: string;
     id: string;
+    disabled?: boolean;
     callback?: () => void;
 }
 
@@ -36,11 +40,13 @@ export default class Menu extends Vue {
     public items: Item[] = [];
 
     get isEmpty() {
-        console.log('---', this, this.$props);
         return this.items.length === 0;
     }
 
     private onClick(item: Item) {
+        if (item.disabled) {
+            return;
+        }
         if (typeof item.callback === 'function') {
             item.callback();
         }
@@ -49,7 +55,6 @@ export default class Menu extends Vue {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .menu {
     position: fixed;
@@ -72,6 +77,14 @@ export default class Menu extends Vue {
 .menu__item:active {
     color: var(--link-color-active);
 }
+.menu__item.disabled,
+.menu__item.disabled:hover,
+.menu__item.disabled:active {
+    cursor: not-allowed;
+    color: var(--link-color-disabled);
+    background-color: var(--menu-bg-color-disabled);
+}
+
 .hidden {
     display: none;
 }

@@ -22,10 +22,12 @@ export default {
     --link-color: var(--color);
     --link-color-hover: var(--primary-color);
     --link-color-active: rgba(255, 220, 50, 1);
+    --link-color-disabled: rgba(100, 100, 100, 1);
 
     --button-bg-color: rgba(40, 0, 20, 1);
     --button-bg-color-active: rgba(70, 60, 70, 1);
     --menu-bg-color: rgba(240, 240, 255, 1);
+    --menu-bg-color-disabled: rgba(200, 200, 200, 1);
 
     --header-height: 50px;
 }
