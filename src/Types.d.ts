@@ -52,3 +52,35 @@ export interface GeolocSettings {
 }
 
 /* }}} */
+/* {{{ Form */
+
+export type FieldType = 'text' | 'number' | 'boolean' | 'range' | 'select'
+    | 'longText' | 'empty' | 'emptyLine' | 'rawText' | 'list' | 'button';
+
+export interface FieldSelectOption {
+    id?: string;
+    text: string;
+    value: string;
+    disabled?: boolean;
+    class?: string;
+};
+
+export interface FieldButtonOption {
+    keepPress?: number;
+};
+
+export interface FormItem {
+    id: string;
+    type: FieldType;
+    value: string | number | string[];
+    label: string;
+    placeholder?: string;
+    title?: string;
+    options?: FieldSelectOption | FieldButtonOption;
+    min?: number;
+    max?: number;
+    disabled: boolean;
+    comment?: string;
+}
+
+/* }}} */

@@ -41,6 +41,7 @@ import {
 
 /* Texts */
 const textStart = 'Démarrer la randonée';
+const textSettings = 'Configuration';
 
 @Options({
     components: {
@@ -61,6 +62,17 @@ export default class Home extends Vue {
         return list;
     }
 
+    get menuList() {
+        const list: Item[] = [];
+
+        list.push({
+            label: textSettings,
+            id: 'settings',
+        });
+
+        return list;
+    }
+
     get isRecording() {
         return store.geolocSettings.isRecording;
     }
@@ -68,9 +80,12 @@ export default class Home extends Vue {
     get list() {
         const openMenu = store.openMenu;
         const settingsList = this.settingsList;
+        const menuList = this.menuList;
 
         if (openMenu === 'settings') {
             return settingsList;
+        } else if (openMenu === 'menu') {
+            return menuList;
         }
         return [] as Item[];
     }
@@ -86,17 +101,16 @@ export default class Home extends Vue {
     }
 
     buttonMenu() {
-        console.log('TODO button menu');
-        notification('TODO button menu', {
-            important: true,
-            title: 'TODO',
-        });
+        store.openMenu = 'menu';
     }
 
     menuSelection(id: string) {
         switch(id) {
             case 'start':
                 startLog();
+                break;
+            case 'settings':
+                notification('Not implemented yet', {type: 'error'});
                 break;
         }
     }
