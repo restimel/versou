@@ -47,5 +47,5 @@ export default class FieldInput extends Vue {
         const value = this.value.type === 'boolean' ? element.checked : element.value;
         this.$emit('input', value);
     }
-};
+}
 </script>

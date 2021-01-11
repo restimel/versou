@@ -88,7 +88,7 @@ export default class FieldText extends Vue {
         const newList = [...list.slice(0, idx), ...list.slice(idx + 1)];
         this.$emit('input', newList);
     }
-};
+}
 </script>
 <style scoped>
 .list__items {

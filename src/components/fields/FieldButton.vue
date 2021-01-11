@@ -91,7 +91,7 @@ export default class FieldButton extends Vue {
         button.style.transitionDuration = '';
         this.isClicking = false;
     }
-};
+}
 </script>
 
 <style scoped>

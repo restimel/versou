@@ -1,18 +1,18 @@
 <template>
     <div class="home">
-        <img alt="Vue logo" src="../assets/logo.png">
-        <Menu msg="Welcome to Your Vue.js + TypeScript App"/>
+        <Leaflet />
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import Menu from '@/components/Menu.vue'; // @ is an alias to /src
+import Leaflet from '@/components/Leaflet.vue';
 
 @Options({
     components: {
-        Menu,
+        Leaflet,
     },
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+}
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <Header />
+    <Header class="header" />
     <router-view/>
 </template>
 <script>
@@ -32,8 +32,13 @@ export default {
     --header-height: 50px;
 }
 
+html {
+    height: 100%;
+}
+
 body {
     margin: 0;
+    height: 100%;
 }
 
 #app {
@@ -42,6 +47,18 @@ body {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: var(--color);
+    height: 100%;
+}
+
+#app {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 50px minmax(0, 1fr);
+    grid-template-areas: "header" "main";
+}
+
+.header {
+    grid-area: header;
 }
 
 button {

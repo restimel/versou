@@ -21,12 +21,13 @@
                 ?
             </button>
         </div>
+
+        <Menu
+            :items="list"
+            @click="menuSelection"
+        />
+        <Notification />
     </div>
-    <Menu
-        :items="list"
-        @click="menuSelection"
-    />
-    <Notification />
 </template>
 
 <script lang="ts">
@@ -120,7 +121,7 @@ export default class Home extends Vue {
 <style scoped>
 .header {
     display: grid;
-    grid-template: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-areas: "settings actions menu";
     height: var(--header-height);
 }

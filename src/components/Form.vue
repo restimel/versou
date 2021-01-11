@@ -48,7 +48,7 @@ export default class Form extends Vue {
             comment: field.comment,
         }));
     }
-};
+}
 </script>
 
 <style scoped>

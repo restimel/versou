@@ -55,7 +55,7 @@ export default class FieldSelect extends Vue {
 
         this.$emit('input', value);
     }
-};
+}
 </script>
 
 <style scoped>

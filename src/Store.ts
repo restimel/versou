@@ -11,6 +11,7 @@ import {
     NotificationMessage,
     GeolocLog,
     GeolocSettings,
+    MapSettings,
 } from '@/Types';
 
 interface Store {
@@ -18,6 +19,7 @@ interface Store {
     notificationSettings: NotificationSettings;
     notification: NotificationMessage;
     geolocSettings: GeolocSettings;
+    mapSettings: MapSettings;
     currentPath: GeolocLog;
 }
 
@@ -43,6 +45,10 @@ const store = reactive<Store>({
         path: [],
         startTime: 0,
         pauseDuration: 0,
+    },
+    mapSettings: {
+        layer: 'openStreetMap',
+        iconPosition: 'trekker',
     },
 });
 

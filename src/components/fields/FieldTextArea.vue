@@ -29,5 +29,5 @@ export default class FieldInput extends Vue {
 
         this.$emit('input', value);
     }
-};
+}
 </script>

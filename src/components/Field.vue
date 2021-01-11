@@ -78,7 +78,7 @@ export default class Field extends Vue {
         }
         return `${label}:`;
     }
-};
+}
 </script>
 
 <style scoped>

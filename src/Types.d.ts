@@ -1,3 +1,5 @@
+import * as L from 'leaflet';
+
 /* List of common types used through the application */
 
 export type MenuType = '' | 'settings' | 'actions' | 'menu';
@@ -52,6 +54,22 @@ export interface GeolocSettings {
 }
 
 /* }}} */
+/* {{{ Map */
+
+export type LayerId = 'satellite' | 'openStreetMap';
+
+export interface LayerProps {
+    url: string;
+    maxZoom?: number;
+    attribution?: string;
+}
+
+export interface MapSettings {
+    layer: LayerId;
+    iconPosition: string;
+}
+
+/* }}} */
 /* {{{ Form */
 
 export type FieldType = 'text' | 'number' | 'boolean' | 'range' | 'select'
@@ -63,11 +81,11 @@ export interface FieldSelectOption {
     value: string;
     disabled?: boolean;
     class?: string;
-};
+}
 
 export interface FieldButtonOption {
     keepPress?: number;
-};
+}
 
 export interface FormItem {
     id: string;
