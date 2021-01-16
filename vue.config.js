@@ -1,3 +1,5 @@
 module.exports = {
-    publicPath: '/versou/',
+    publicPath: process.env.NODE_ENV === 'production'
+        ? '/versou/'
+        : '/',
 };

@@ -18,6 +18,13 @@
                     :attribution="layer.attribution"
                 ></LTileLayer>
 
+                <LCircle v-if="currentPosition && currentPositionAccuracy > AccuracyThreshold"
+                    :lat-lng="currentPosition"
+                    :radius="currentPositionAccuracy"
+                    color="red"
+                    fill
+                    fillColor="purple"
+                />
                 <LMarker v-if="currentPosition"
                     :lat-lng="currentPosition"
                 >
@@ -81,6 +88,7 @@ const {
     LPolyline,
     LPolygon,
     LRectangle,
+    LCircle,
 } = VueLeaflet;
 
 @Options({
@@ -104,6 +112,7 @@ const {
         LPolyline,
         LPolygon,
         LRectangle,
+        LCircle,
     },
     watch: {
         currentPosition() {
@@ -117,6 +126,11 @@ export default class Leaflet extends Vue {
     private center: LatLngTuple = [46.5, 2.4];
     private zoom = 6;
     private followCenter = true;
+
+    /* constant */
+    private AccuracyThreshold = 15;
+
+    private wlistener: undefined | (() => void);
 
     get textPosition() {
         return textPosition;
@@ -186,6 +200,16 @@ export default class Leaflet extends Vue {
         return path[lastIdx];
     }
 
+    get currentPositionAccuracy(): number {
+        const path = this.recordedPath;
+        const length = path.length;
+        if (length === 0) {
+            return 0;
+        }
+        console.log('acc', path[length -1].accuracy);
+        return path[length -1].accuracy || 0;
+    }
+
     get canCenter() {
         return !this.followCenter && !!this.currentPosition;
     }
@@ -203,19 +227,8 @@ export default class Leaflet extends Vue {
         }
 
         const box = parent.getBoundingClientRect();
-        console.log('box', box.height);
         const height = box.height;
         el.style.height = `${height}px`;
-        // this.map && this.map.invalidateSize();
-        setTimeout(() => {
-            console.log('center', this.center, this.zoom);
-            this.center = [40.5, 3.4];
-            setTimeout(() => {
-                console.log('center2', this.center, this.zoom);
-                this.center = [0, 0];
-                this.zoom = 8;
-            }, 5000);
-        }, 5000);
     }
 
     private recenter() {
@@ -227,7 +240,8 @@ export default class Leaflet extends Vue {
     }
 
     private log(a: string) {
-        console.log(a);
+        const c = console;
+        c.log(a);
     }
 
     // updateSlots() {
@@ -251,7 +265,7 @@ export default class Leaflet extends Vue {
 
         // const map = L.map(el).setView([42.505, 1], this.zoom);
         // const map = L.map(el).setView(this.center, this.zoom);
-        console.log('should start');
+        // console.log('should start');
 
         // this.map = map;
 
@@ -265,6 +279,17 @@ export default class Leaflet extends Vue {
 
         // console.log('mounted', this.$slots, map);
         // this.updateSlots();
+
+        if (!this.wlistener) {
+            this.wlistener = () => this.setSize();
+            window.addEventListener('resize', this.wlistener);
+        }
+    }
+
+    destroyed() {
+        if (this.wlistener) {
+            window.removeEventListener('resize', this.wlistener);
+        }
     }
 }
 </script>

@@ -1,6 +1,13 @@
 # versou
 Application to log geoloc path (mainly trekking) and help to follow recorded path.
 
+All information are stored only on your browser.
+Currently the application is only available in French.
+
+## Test
+
+Run the application online: https://restimel.github.io/versou/
+
 ## Project setup
 ```
 npm install

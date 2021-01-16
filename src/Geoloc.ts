@@ -13,16 +13,20 @@ import {
 let pauseTs = 0;
 let timer = 0;
 let nbLastError = 0;
-const nbErrorMax = 5;
+const nbErrorMax = 3;
+
+const c = console;
 
 /* Texts */
 const permissionDenied = 'Vous devez autoriser la géolocalisation pour enregistrer votre position.';
 const unknownError = 'Une erreur est survenue pour récupérer les coordonées.';
+const textRetrying = 'Nouvel essai ...';
 
 function addLog(point: GeolocPoint, timestamp?: number) {
     const currentPath = store.currentPath;
     const currentTime = Date.now();
-    console.log('timestamp', timestamp, 'Date.now()', currentTime);
+
+    c.log('timestamp', timestamp, 'Date.now()', currentTime);
     const relativeTime = currentTime - currentPath.startTime - currentPath.pauseDuration;
     const record: GeolocRecord = {
         ...point,
@@ -35,6 +39,7 @@ function addLog(point: GeolocPoint, timestamp?: number) {
 function continueLog(delay?: number) {
     const geolocSettings = store.geolocSettings;
     const duration = typeof delay === 'number' ? delay : geolocSettings.refreshTime;
+
     timer = setTimeout(getPosition, duration);
 }
 
@@ -64,8 +69,26 @@ function handlePosition(position: GeolocationPosition) {
 }
 
 function handleError(error: GeolocationPositionError) {
-    let title: string;
-    let message: string;
+    const geolocSettings = store.geolocSettings;
+    let title: string | undefined;
+    let message: string | undefined;
+
+    const retryLog = () => {
+        nbLastError++;
+        if (nbLastError >= nbErrorMax) {
+            pause();
+            title = unknownError;
+            message = error.message;
+        } else {
+            notification(textRetrying, {
+                title: unknownError,
+                type: 'warning',
+                important: false,
+                delay: 10000,
+            });
+            continueLog(10);
+        }
+    };
 
     switch(error.code) {
         case error.PERMISSION_DENIED:
@@ -74,16 +97,14 @@ function handleError(error: GeolocationPositionError) {
             message = error.message;
             break;
         case error.POSITION_UNAVAILABLE:
-        case error.TIMEOUT:
-            nbLastError++;
-            if (nbLastError >= nbErrorMax) {
-                pause();
-                title = unknownError;
-                message = error.message;
-            } else {
-                continueLog(10);
-                return;
+            if (nbLastError === 0 && geolocSettings.highPrecision) {
+                /* Downgrade the geolocalisation */
+                geolocSettings.highPrecision = false;
             }
+            retryLog();
+            break;
+        case error.TIMEOUT:
+            retryLog();
             break;
         default:
             pause();
@@ -91,13 +112,15 @@ function handleError(error: GeolocationPositionError) {
             message = error.message;
     }
 
-    notification(message, {
-        title: title,
-        type: 'error',
-        important: true,
-        vibrationMessage: '**ERROR**',
-        delay: 15000,
-    });
+    if (message) {
+        notification(message, {
+            title: title,
+            type: 'error',
+            important: true,
+            vibrationMessage: '**ERROR**',
+            delay: 15000,
+        });
+    }
 }
 
 function getPosition() {

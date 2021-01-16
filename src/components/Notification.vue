@@ -62,6 +62,8 @@ export default class Menu extends Vue {
     border: 5px double white;
     box-shadow: -2px -5px 10px 0 black;
 
+    z-index: 1000;
+
     cursor: pointer;
 }
 .notification.info {

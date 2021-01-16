@@ -96,9 +96,7 @@ export default class Home extends Vue {
     }
 
     buttonActions() {
-        console.log('TODO button actions');
-        notification('TODO button actions', {
-        });
+        startLog();
     }
 
     buttonMenu() {

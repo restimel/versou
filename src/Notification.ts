@@ -30,22 +30,38 @@ export function vibrate(code = '**WAIT**'): boolean {
     return navigator.vibrate(vibration);
 }
 
-async function sendHardNotification(message: string, vibrationMessage?: string) {
+export async function messagePermission() {
+    const permission = await Notification.requestPermission();
+    if (permission === 'denied') {
+        notificationSettings.hardware = false;
+    }
+    return permission;
+}
+
+export async function sendHardNotification(message: string, options: NotifOptions = {}) {
     if (!notificationSettings.hardware) {
         return;
     }
 
-    if (Notification.permission === 'denied') {
-        const permission = await Notification.requestPermission();
+    const {
+        title = '',
+        vibrationMessage = '',
+    } = options;
+
+    if (Notification.permission !== 'granted') {
+        const permission = await messagePermission();
         if (permission === 'denied') {
-            notificationSettings.hardware = false;
             return;
         }
     }
 
     vibrate(vibrationMessage);
 
-    return new Notification(message, {});
+    const messageTitle = title ? `Versou: ${title}` : 'Versou';
+
+    return new Notification(messageTitle, {
+        body: message,
+    });
 }
 
 export default function(message: string, options: NotifOptions = {}) {
@@ -58,7 +74,7 @@ export default function(message: string, options: NotifOptions = {}) {
     } = options;
 
     if (important) {
-        sendHardNotification(message, vibrationMessage);
+        sendHardNotification(message, options);
     } else if (vibrationMessage) {
         vibrate(vibrationMessage);
     }
