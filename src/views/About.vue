@@ -1,5 +1,6 @@
 <template>
     <div class="about">
+        <Back />
         <h1>À propos</h1>
         <h2>Credit</h2>
         <ul>
@@ -9,3 +10,14 @@
         </ul>
     </div>
 </template>
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+import Back from '@/components/Back.vue';
+
+@Options({
+    components: {
+        Back,
+    },
+})
+export default class About extends Vue {}
+</script>

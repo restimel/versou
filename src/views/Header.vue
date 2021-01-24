@@ -48,6 +48,7 @@ import { MenuPosition } from '@/Types';
 const textStart = 'Démarrer la randonée';
 const textGeolocSettings = 'Configuration';
 const textLoad = 'Charger une rando';
+const textAbout = 'À propos';
 
 @Options({
     components: {
@@ -73,10 +74,13 @@ export default class Home extends Vue {
 
         list.push({
             label: textGeolocSettings,
-            id: 'menuActions',
+            id: 'geolocSettings',
         }, {
             label: textLoad,
             id: 'loadTrek',
+        }, {
+            label: textAbout,
+            id: 'about',
         });
 
         return list;
@@ -145,7 +149,10 @@ export default class Home extends Vue {
             case 'start':
                 startLog();
                 break;
-            case 'menuActions':
+            case 'about':
+                this.$router.push('About');
+                break;
+            case 'geolocSettings':
                 this.$router.push('geolocsettings');
                 break;
             default:

@@ -24,6 +24,7 @@ export default class FieldInput extends Vue {
 <style scoped>
 .button-back {
     width: 100%;
+    height: 50px;
     color: var(--button-color);
 }
 .button-back:hover {
