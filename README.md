@@ -4,7 +4,7 @@ Application to log geoloc path (mainly trekking) and help to follow recorded pat
 All information are stored only on your browser.
 Currently the application is only available in French.
 
-## Test
+## Online test
 
 Run the application online: https://restimel.github.io/versou/
 
@@ -21,11 +21,6 @@ npm run serve
 ### Compiles and minifies for production
 ```
 npm run build
-```
-
-### Run your tests
-```
-npm run test
 ```
 
 ### Lints and fixes files

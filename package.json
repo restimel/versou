@@ -1,8 +1,11 @@
 {
     "name": "versou",
-    "version": "0.1.0",
+    "version": "0.2.0",
+    "author": "Restimel",
+    "license": "MIT",
     "private": false,
     "description": "Application to log geoloc path (mainly trekking) and help to follow recorded path.",
+    "homepage": "https://github.com/restimel/versou#readme",
     "scripts": {
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
