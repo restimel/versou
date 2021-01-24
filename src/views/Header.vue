@@ -1,8 +1,8 @@
 <template>
     <div class="header">
-        <div class="settings">
+        <div class="menuActions">
             <button
-                @click="buttonSettings"
+                @click="buttonMenuActions"
             >
                 !
             </button>
@@ -14,9 +14,9 @@
                 >
             </button>
         </div>
-        <div class="menu">
+        <div class="settings">
             <button
-                @click="buttonMenu"
+                @click="buttonSettings"
             >
                 ?
             </button>
@@ -24,6 +24,8 @@
 
         <Menu
             :items="list"
+            :position="menuPosition"
+            class="header-menu"
             @click="menuSelection"
         />
         <Notification />
@@ -38,11 +40,14 @@ import Notification from '@/components/Notification.vue';
 import notification from '@/Notification';
 import {
     startLog,
+    togglePlay,
 } from '@/Geoloc';
+import { MenuPosition } from '@/Types';
 
 /* Texts */
 const textStart = 'Démarrer la randonée';
-const textSettings = 'Configuration';
+const textGeolocSettings = 'Configuration';
+const textLoad = 'Charger une rando';
 
 @Options({
     components: {
@@ -51,7 +56,7 @@ const textSettings = 'Configuration';
     },
 })
 export default class Home extends Vue {
-    get settingsList() {
+    get menuActionsList() {
         const list: Item[] = [];
 
         list.push({
@@ -67,11 +72,26 @@ export default class Home extends Vue {
         const list: Item[] = [];
 
         list.push({
-            label: textSettings,
-            id: 'settings',
+            label: textGeolocSettings,
+            id: 'menuActions',
+        }, {
+            label: textLoad,
+            id: 'loadTrek',
         });
 
         return list;
+    }
+
+    get menuPosition(): MenuPosition {
+        const openMenu = store.openMenu;
+
+        if (openMenu === 'settings') {
+            return 'right';
+        }
+        if (openMenu === 'menuActions') {
+            return 'left';
+        }
+        return 'center';
     }
 
     get isRecording() {
@@ -80,37 +100,58 @@ export default class Home extends Vue {
 
     get list() {
         const openMenu = store.openMenu;
-        const settingsList = this.settingsList;
+        const menuActionsList = this.menuActionsList;
         const menuList = this.menuList;
 
-        if (openMenu === 'settings') {
-            return settingsList;
-        } else if (openMenu === 'menu') {
+        if (openMenu === 'menuActions') {
+            return menuActionsList;
+        } else if (openMenu === 'settings') {
             return menuList;
         }
         return [] as Item[];
     }
 
-    buttonSettings() {
-        store.openMenu = 'settings';
+    buttonMenuActions() {
+        if (store.openMenu === 'menuActions') {
+            store.openMenu = '';
+        } else {
+            store.openMenu = 'menuActions';
+        }
     }
 
     buttonActions() {
-        startLog();
+        store.openMenu = '';
+        if (this.isRecording) {
+            togglePlay();
+        } else {
+            startLog();
+        }
     }
 
-    buttonMenu() {
-        store.openMenu = 'menu';
+    buttonSettings() {
+        if (store.openMenu === 'settings') {
+            store.openMenu = '';
+        } else {
+            store.openMenu = 'settings';
+        }
     }
 
     menuSelection(id: string) {
+        if (typeof id !== 'string') {
+            return;
+        }
+        store.openMenu = '';
         switch(id) {
             case 'start':
                 startLog();
                 break;
-            case 'settings':
-                notification('Not implemented yet', {type: 'error'});
+            case 'menuActions':
+                this.$router.push('geolocsettings');
                 break;
+            default:
+                notification(`L'action "${id}" n'est pas implémentée`, {
+                    type: 'error',
+                });
         }
     }
 }
@@ -120,25 +161,24 @@ export default class Home extends Vue {
 .header {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-areas: "settings actions menu";
+    grid-template-areas: "menuActions actions settings";
     height: var(--header-height);
 }
 
-.settings {
-    grid-area: settings;
+.menuActions {
+    grid-area: menuActions;
 }
 
 .actions {
     grid-area: actions;
 }
 
-.menu {
-    grid-area: menu;
+.settings {
+    grid-area: settings;
 }
 
 button {
     width: 100%;
-    max-width: 100px;
     height: 100%;
     font-size: calc(var(--header-height - 10px));
 
@@ -154,5 +194,9 @@ button:active {
     color: var(--button-color-active);
     background-color: var(--button-bg-color-active);
     border-style: inset;
+}
+
+.header-menu {
+    width: 33%;
 }
 </style>

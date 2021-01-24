@@ -1,9 +1,9 @@
 <template>
     <div
         class="menu"
-        :class="{
+        :class="[{
             hidden: isEmpty,
-        }"
+        }, position]"
     >
         <div v-for="item of items"
             :key="item.id"
@@ -11,7 +11,7 @@
             :class="{
                 disabled: !!item.disabled,
             }"
-            @click="onClick(item)"
+            @click.prevent.stop="onClick(item)"
         >
             {{item.label}}
         </div>
@@ -19,6 +19,7 @@
 </template>
 
 <script lang="ts">
+import { MenuPosition } from '@/Types';
 import { Options, Vue } from 'vue-class-component';
 
 export interface Item {
@@ -34,10 +35,16 @@ export interface Item {
             type: Array,
             required: true,
         },
+        position: {
+            type: String,
+            default: 'center',
+        },
     },
+    emits: ['click'],
 })
 export default class Menu extends Vue {
     public items: Item[] = [];
+    private menuPosition!: MenuPosition;
 
     get isEmpty() {
         return this.items.length === 0;
@@ -58,21 +65,33 @@ export default class Menu extends Vue {
 <style scoped>
 .menu {
     position: fixed;
+    z-index: 1500;
     top: var(--header-height);
-    left: 50%;
-    transform: translate(-50%, 0);
 
     background-color: var(--menu-bg-color);
-    padding: 1em;
 
     box-shadow: 5px 2px 10px 0 black;
 }
+.menu.left {
+    left: 4px;
+}
+.menu.right {
+    right: 4px;
+}
+.menu.center {
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
 .menu__item {
+    padding: 1em;
+
     cursor: pointer;
     color: var(--link-color);
 }
 .menu__item:hover {
     color: var(--link-color-hover);
+    background-color: rgba(255, 255, 2555, 0.4);
 }
 .menu__item:active {
     color: var(--link-color-active);

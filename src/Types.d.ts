@@ -2,8 +2,12 @@ import * as L from 'leaflet';
 
 /* List of common types used through the application */
 
-export type MenuType = '' | 'settings' | 'actions' | 'menu';
+/* {{{ Menu */
 
+export type MenuType = '' | 'settings' | 'actions' | 'menuActions';
+export type MenuPosition = 'left' | 'center' | 'right';
+
+/* }}} */
 /* {{{ Notification */
 
 export interface NotificationSettings {
@@ -56,7 +60,7 @@ export interface GeolocSettings {
 /* }}} */
 /* {{{ Map */
 
-export type LayerId = 'satellite' | 'openStreetMap';
+export type LayerId = 'satellite' | 'Openstreetmap' | 'carte IGN';
 
 export interface LayerProps {
     url: string;

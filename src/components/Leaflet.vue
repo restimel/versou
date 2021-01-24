@@ -24,7 +24,11 @@
                     color="red"
                     fill
                     fillColor="purple"
-                />
+                >
+                    <LPopup>
+                        {{text.accuracy.replace(/%s/, currentPositionAccuracy)}}
+                    </LPopup>
+                </LCircle>
                 <LMarker v-if="currentPosition"
                     :lat-lng="currentPosition"
                 >
@@ -32,16 +36,9 @@
                         :icon-url="currentPositionIcon"
                     />
                     <LTooltip>
-                        {{textPosition}}
+                        {{text.position}}
                     </LTooltip>
                 </LMarker>
-
-                <!-- <LMarker :lat-lng="center" draggable
-                >
-                    <LPopup>
-                    lol
-                    </LPopup>
-                </LMarker> -->
 
                 <LPolyline
                     :lat-lngs="currentPath"
@@ -54,9 +51,9 @@
         >
             <button
                 @click="recenter"
-                :title="textCenterTitle"
+                :title="text.centerTitle"
             >
-                {{textCenter}}
+                {{text.center}}
             </button>
         </div>
     </div>
@@ -65,7 +62,10 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import store from '@/Store';
-import { icons, layers } from '@/tools/mapInfo';
+import {
+    layers,
+    getUrlIcon,
+} from '@/tools/mapInfo';
 import * as VueLeaflet from '@vue-leaflet/vue-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { LatLngTuple } from 'leaflet';
@@ -76,6 +76,7 @@ import {
 const textPosition = 'Votre position actuelle';
 const textCenterTitle = 'Recentrer et suivre votre position';
 const textCenter = 'Recentrer';
+const textAccuracy = 'La précision de votre position est à %sm près.';
 
 const {
     LMap,
@@ -92,15 +93,6 @@ const {
 } = VueLeaflet;
 
 @Options({
-    // props: {
-    //     center: Array,
-    //     zoom: Number,
-    // },
-    // provide() {
-    //     return {
-    //         map: computed(() => this.map),
-    //     };
-    // },
     components: {
         LMap,
         LIcon,
@@ -132,25 +124,18 @@ export default class Leaflet extends Vue {
 
     private wlistener: undefined | (() => void);
 
-    get textPosition() {
-        return textPosition;
-    }
-
-    get textCenter() {
-        return textCenter;
-    }
-
-    get texCenterTitle() {
-        return textCenterTitle;
+    get text() {
+        return {
+            accuracy: textAccuracy,
+            position: textPosition,
+            center: textCenter,
+            centerTitle: textCenterTitle,
+        };
     }
 
     get currentPositionIcon() {
         const icon = store.mapSettings.iconPosition;
-        const data = icons.get(icon);
-        if (!data) {
-            return undefined;
-        }
-        return `data:image/png;base64,${data}`;
+        return getUrlIcon(icon);
     }
 
     get layerName(): LayerId {
@@ -163,7 +148,7 @@ export default class Leaflet extends Vue {
 
         if (!layer) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            layer = layers.get('openStreetMap')!;
+            layer = layers.get('Openstreetmap')!;
         }
 
         return layer;
@@ -178,13 +163,6 @@ export default class Leaflet extends Vue {
         return path.map((point) => {
             return [point.lat, point.lng] as LatLngTuple;
         });
-        // return [
-        //     [47.334852, -1.509485],
-        //     [47.342596, -1.328731],
-        //     [47.241487, -1.190568],
-        //     [47.234787, -1.358337],
-        //     this.center,
-        // ];
     }
 
     get currentPosition(): LatLngTuple | undefined {
@@ -206,7 +184,6 @@ export default class Leaflet extends Vue {
         if (length === 0) {
             return 0;
         }
-        console.log('acc', path[length -1].accuracy);
         return path[length -1].accuracy || 0;
     }
 
@@ -239,51 +216,14 @@ export default class Leaflet extends Vue {
         }
     }
 
-    private log(a: string) {
-        const c = console;
-        c.log(a);
-    }
-
-    // updateSlots() {
-    //     const slots = this.$slots.default;
-    //     if (!slots) {
-    //         return;
-    //     }
-    //     const elements = slots();
-
-    //     console.log('elements', elements.length);
-    //     // elements.forEach((slot: any) => {
-    //     //     console.log('slot', slot);
-    //     //     slot.props.map = this.map;
-    //     // });
-    // }
-
     mounted() {
-        // const el = this.$refs.leaflet as HTMLDivElement;
-
         this.setSize();
-
-        // const map = L.map(el).setView([42.505, 1], this.zoom);
-        // const map = L.map(el).setView(this.center, this.zoom);
-        // console.log('should start');
-
-        // this.map = map;
-
-        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        //     maxZoom: 18,
-        //     id: 'mapbox/streets-v11',
-        //     tileSize: 512,
-        //     zoomOffset: -1,
-        // }).addTo(map);
-
-        // console.log('mounted', this.$slots, map);
-        // this.updateSlots();
 
         if (!this.wlistener) {
             this.wlistener = () => this.setSize();
             window.addEventListener('resize', this.wlistener);
         }
+        this.recenter();
     }
 
     destroyed() {

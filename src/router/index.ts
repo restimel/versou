@@ -13,6 +13,10 @@ const routes: Array<RouteRecordRaw> = [{
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
 }, {
+    path: '/geolocsettings',
+    name: 'GeolocSettings',
+    component: () => import(/* webpackChunkName: "geloc" */ '../views/GeolocSettings.vue'),
+}, {
     path: '/:catchAll(.*)',
     redirect: '/',
 }];

@@ -47,7 +47,7 @@ const store = reactive<Store>({
         pauseDuration: 0,
     },
     mapSettings: {
-        layer: 'openStreetMap',
+        layer: 'Openstreetmap',
         iconPosition: 'trekker',
     },
 });
