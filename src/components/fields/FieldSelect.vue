@@ -34,7 +34,7 @@ export default class FieldSelect extends Vue {
     private value!: FormItem;
 
     get options() {
-        const options: FieldSelectOption[] = this.value.options || [];
+        const options = (this.value.options || []) as FieldSelectOption[];
         const id = this.value.id;
 
         options.forEach((opt, idx) => {

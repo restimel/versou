@@ -69,11 +69,20 @@ export interface MapSettings {
     iconPosition: string;
 }
 
+export type ImageType = 'url' | 'base64';
+
+export interface MarkerSetting {
+    label: string;
+    url: string;
+    type: ImageType;
+}
+
 /* }}} */
 /* {{{ Form */
 
 export type FieldType = 'text' | 'number' | 'boolean' | 'range' | 'select'
-    | 'longText' | 'empty' | 'emptyLine' | 'rawText' | 'list' | 'button';
+    | 'longText' | 'empty' | 'emptyLine' | 'rawText' | 'list' | 'button'
+    | 'image';
 
 export interface FieldSelectOption {
     id?: string;
@@ -90,11 +99,12 @@ export interface FieldButtonOption {
 export interface FormItem {
     id: string;
     type: FieldType;
-    value: string | number | string[];
+    value: string | number | boolean | string[];
     label: string;
+    unit?: string;
     placeholder?: string;
     title?: string;
-    options?: FieldSelectOption | FieldButtonOption;
+    options?: FieldSelectOption[] | FieldButtonOption;
     min?: number;
     max?: number;
     disabled: boolean;

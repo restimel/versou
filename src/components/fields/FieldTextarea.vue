@@ -20,7 +20,7 @@ import { Options, Vue } from 'vue-class-component';
     },
     emits: ['input', 'action'],
 })
-export default class FieldInput extends Vue {
+export default class FieldTextarea extends Vue {
     private value!: FormItem;
 
     private change(evt: Event) {

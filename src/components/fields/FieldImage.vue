@@ -1,13 +1,12 @@
 <template>
-    <span
+    <img
         :id="value.id"
         :title="value.title"
+        :src="value.value"
         :class="{
             disabled: value.disabled,
         }"
     >
-        {{value.value}}
-    </span>
 </template>
 <script lang="ts">
 import {
@@ -21,12 +20,12 @@ import { Options, Vue } from 'vue-class-component';
     },
     emits: ['input', 'action'],
 })
-export default class FieldText extends Vue {
+export default class FieldImage extends Vue {
     private value!: FormItem;
 }
 </script>
 <style scoped>
-span {
-    font-style: italic;
+.disabled {
+    opacity: 0.5;
 }
 </style>

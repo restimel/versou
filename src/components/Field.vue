@@ -7,13 +7,18 @@
         {{labelDisplay}}
     </label>
     <span class="field__value">
-        <component
-            :is="componentKind"
-            :value="value"
+        <span>
+            <component
+                :is="componentKind"
+                :value="value"
 
-            @input="$emit('input', $event)"
-            @action="$emit('action', $event)"
-        />
+                @input="$emit('input', $event)"
+                @action="$emit('action', $event)"
+            />
+            <span v-if="unit">
+                {{unit}}
+            </span>
+        </span>
         <div v-if="value.comment"
             class="comment"
         >
@@ -34,6 +39,7 @@ import FieldText from '@/components/fields/FieldText.vue';
 import FieldSelect from '@/components/fields/FieldSelect.vue';
 import FieldList from '@/components/fields/FieldList.vue';
 import FieldButton from '@/components/fields/FieldButton.vue';
+import FieldImage from '@/components/fields/FieldImage.vue';
 
 @Options({
     props: {
@@ -47,6 +53,7 @@ import FieldButton from '@/components/fields/FieldButton.vue';
         FieldSelect,
         FieldList,
         FieldButton,
+        FieldImage,
     },
 })
 export default class Field extends Vue {
@@ -65,6 +72,7 @@ export default class Field extends Vue {
             select: 'FieldSelect',
             list: 'FieldList',
             button: 'FieldButton',
+            image: 'FieldImage',
         };
 
         const kind = mapping[this.value.type];
@@ -77,6 +85,14 @@ export default class Field extends Vue {
             return '';
         }
         return `${label}:`;
+    }
+
+    private get unit(): string {
+        const unit = this.value.unit;
+        if (typeof unit !== 'string') {
+            return '';
+        }
+        return unit;
     }
 }
 </script>

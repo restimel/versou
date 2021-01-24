@@ -23,6 +23,7 @@ import Field from '@/components/Field.vue';
     components: {
         Field,
     },
+    emits: ['input', 'action'],
 })
 export default class Form extends Vue {
     private values!: Partial<FormItem>[];
@@ -39,6 +40,7 @@ export default class Form extends Vue {
             type: field.type || 'text',
             value: field.value,
             label: field.label || '',
+            unit: field.unit || '',
             placeholder: field.placeholder,
             title: field.title,
             options: field.options,

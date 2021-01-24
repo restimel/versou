@@ -52,7 +52,7 @@ import { Options, Vue } from 'vue-class-component';
     },
     emits: ['input', 'action'],
 })
-export default class FieldText extends Vue {
+export default class FieldList extends Vue {
     private value!: FormItem;
 
     private newValue = '';
@@ -61,7 +61,7 @@ export default class FieldText extends Vue {
         let value = this.value.value;
 
         if (!Array.isArray(value)) {
-            value = [value];
+            value = [value as string];
         }
 
         return value;
